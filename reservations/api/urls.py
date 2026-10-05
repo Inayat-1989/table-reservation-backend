@@ -1,0 +1,81 @@
+from django.urls import path
+
+from .views import (
+    ActiveReservationView,
+    MenuListView,
+    OTPResendView,
+    OTPVerifyView,
+    ReservationCancelView,
+    ReservationCreateView,
+    ReservationDetailView,
+    ReservationDraftCreateView,
+    ReservationDraftFinalizeView,
+    ReservationDraftMenuUpdateView,
+    ReservationListView,
+    SlotListView,
+)
+from .views.security import csrf_token_view
+
+urlpatterns = [
+    path(
+        "menu/",
+        MenuListView.as_view(),
+        name="menu-list",
+    ),
+    path(
+        "slots/",
+        SlotListView.as_view(),
+        name="slot-list",
+    ),
+    path(
+        "reservations/",
+        ReservationListView.as_view(),
+        name="reservation-list",
+    ),
+    path(
+        "reservations/create/",
+        ReservationCreateView.as_view(),
+        name="reservation-create",
+    ),
+    path(
+        "reservations/<uuid:reference_code>/",
+        ReservationDetailView.as_view(),
+        name="reservation-detail",
+    ),
+    path(
+        "reservations/<uuid:reference_code>/cancel/",
+        ReservationCancelView.as_view(),
+        name="reservation-cancel",
+    ),
+    path(
+        "reservations/otp/resend/",
+        OTPResendView.as_view(),
+        name="otp-resend",
+    ),
+    path(
+        "reservations/otp/verify/",
+        OTPVerifyView.as_view(),
+        name="otp-verify",
+    ),
+    path(
+        "reservations/draft/",
+        ReservationDraftCreateView.as_view(),
+        name="reservation-draft-create",
+    ),
+    path(
+        "reservations/active/",
+        ActiveReservationView.as_view(),
+        name="active-reservation",
+    ),
+    path(
+        "reservations/draft/menu/",
+        ReservationDraftMenuUpdateView.as_view(),
+        name="reservation-draft-menu-update",
+    ),
+    path(
+        "reservations/draft/finalize/",
+        ReservationDraftFinalizeView.as_view(),
+        name="reservation-draft-finalize",
+    ),
+    path("csrf/", csrf_token_view, name="csrf-token"),
+]
