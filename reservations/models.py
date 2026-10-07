@@ -73,14 +73,43 @@ class TimeSlot(models.Model):
         return self.starts_at.strftime("%Y-%m-%d %H:%M")
 
 
-class MenuItem(models.Model):
-    class Category(models.TextChoices):
-        STARTER = "STARTER", "Starter"
-        MAIN = "MAIN", "Main Course"
-        DESSERT = "DESSERT", "Dessert"
-        DRINK = "DRINK", "Drink"
+class MenuCategory(models.Model):
+    id = models.BigAutoField(
+        primary_key=True,
+    )
 
-    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+    )
+
+    description = models.TextField(
+        blank=True,
+    )
+
+    is_active = models.BooleanField(
+        default=True,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+    )
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
+class MenuItem(models.Model):
+    id = models.BigAutoField(
+        primary_key=True,
+    )
 
     seed_key = models.CharField(
         max_length=100,
@@ -89,11 +118,14 @@ class MenuItem(models.Model):
         blank=True,
     )
 
-    title = models.CharField(max_length=150)
+    category = models.ForeignKey(
+        MenuCategory,
+        on_delete=models.PROTECT,
+        related_name="menu_items",
+    )
 
-    category = models.CharField(
-        max_length=20,
-        choices=Category.choices,
+    title = models.CharField(
+        max_length=150,
     )
 
     description = models.TextField(
@@ -108,7 +140,9 @@ class MenuItem(models.Model):
     price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        validators=[MinValueValidator(0)],
+        validators=[
+            MinValueValidator(0),
+        ],
     )
 
     is_special = models.BooleanField(
@@ -118,6 +152,22 @@ class MenuItem(models.Model):
     is_available = models.BooleanField(
         default=True,
     )
+
+    is_deleted = models.BooleanField(
+        default=False,
+        db_index=True,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+    )
+
+    class Meta:
+        ordering = ["title"]
 
     def __str__(self):
         return self.title

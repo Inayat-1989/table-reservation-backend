@@ -9,7 +9,7 @@ from reservations.api.serializers.reservation import (
     ReservationResponseSerializer,
 )
 from reservations.selectors.reservation import (
-    get_active_draft_reservation,
+    get_active_reservation,
     get_customer_reservations,
     get_reservation_by_reference,
 )
@@ -308,7 +308,7 @@ class ActiveReservationView(APIView):
                 status=status.HTTP_200_OK,
             )
 
-        reservation = get_active_draft_reservation(browser_session)
+        reservation = get_active_reservation(browser_session)
 
         if not reservation:
             return Response(

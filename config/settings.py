@@ -47,6 +47,15 @@ BROWSER_SESSION_COOKIE_SECURE = False
 BROWSER_SESSION_COOKIE_SAMESITE = "Lax"
 
 
+ADMIN_SESSION_DAYS = 1
+
+ADMIN_LOGIN_CHALLENGE_MINUTES = 5
+
+ADMIN_OTP_EXPIRY_MINUTES = 5
+
+ADMIN_OTP_MAX_ATTEMPTS = 5
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -62,6 +71,7 @@ INSTALLED_APPS = [
     "corsheaders",
     # Local apps
     "reservations",
+    "admin_portal",
 ]
 
 MIDDLEWARE = [
@@ -153,6 +163,17 @@ TIME_ZONE = "Asia/Karachi"
 USE_I18N = True
 
 USE_TZ = True
+
+
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+
+CELERY_TASK_SERIALIZER = "json"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_RESULT_SERIALIZER = "json"
+
+CELERY_TIMEZONE = TIME_ZONE
+
+CELERY_TASK_TRACK_STARTED = True
 
 
 # Static files (CSS, JavaScript, Images)

@@ -16,6 +16,7 @@ def get_menu_item_by_id(menu_item_id):
     return MenuItem.objects.filter(
         id=menu_item_id,
         is_available=True,
+        is_deleted=False,
     ).first()
 
 
@@ -32,4 +33,5 @@ def get_available_menu_items_by_ids(menu_item_ids):
     return MenuItem.objects.filter(
         id__in=menu_item_ids,
         is_available=True,
+        is_deleted=False,
     )

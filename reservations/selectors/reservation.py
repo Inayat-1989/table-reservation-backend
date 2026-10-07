@@ -64,3 +64,35 @@ def get_active_draft_reservation(browser_session):
         .order_by("-created_at")
         .first()
     )
+
+
+from django.db.models import Q
+
+
+def get_active_reservation(browser_session):
+    now = timezone.now()
+
+    return (
+        Reservation.objects.select_related(
+            "customer",
+            "slot",
+        )
+        .filter(
+            customer__browser_session=browser_session,
+        )
+        .filter(
+            Q(
+                status=Reservation.Status.DRAFT,
+                expires_at__gt=now,
+            )
+            | Q(
+                status=Reservation.Status.PENDING_VERIFICATION,
+                expires_at__gt=now,
+            )
+            | Q(
+                status=Reservation.Status.CONFIRMED,
+            )
+        )
+        .order_by("-created_at")
+        .first()
+    )

@@ -1,7 +1,7 @@
 INITIAL_MENU_ITEMS = [
     {
         "seed_key": "item-1",
-        "category": "STARTER",
+        "category": "Starter",
         "title": "Chicken Tikka",
         "description": "An extraordinary starter dish from India.",
         "price": "12.99",
@@ -11,7 +11,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-2",
-        "category": "STARTER",
+        "category": "Starter",
         "title": "Chinese Roll",
         "description": "Chinese cuisine best starters roll.",
         "price": "9.50",
@@ -21,7 +21,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-3",
-        "category": "MAIN",
+        "category": "Main Course",
         "title": "Jan-Chan Ramen",
         "description": "Chinese Ramen created in Japan.",
         "price": "16.00",
@@ -31,7 +31,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-4",
-        "category": "STARTER",
+        "category": "Starter",
         "title": "Veg-Olive Salad",
         "description": "Fresh olives mixed with seasonal salad.",
         "price": "10.00",
@@ -41,7 +41,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-5",
-        "category": "DESSERT",
+        "category": "Dessert",
         "title": "Choco Lava",
         "description": "Lava mixed chocolates with molten center.",
         "price": "8.50",
@@ -51,7 +51,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-6",
-        "category": "MAIN",
+        "category": "Main Course",
         "title": "Avocado Rice",
         "description": "Rice mixed with fresh seasoned avocados.",
         "price": "14.00",
@@ -61,7 +61,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-7",
-        "category": "STARTER",
+        "category": "Starter",
         "title": "Truffle Fries",
         "description": "Crispy hand-cut fries tossed with parmesan and black truffle oil.",
         "price": "11.00",
@@ -71,7 +71,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-8",
-        "category": "STARTER",
+        "category": "Starter",
         "title": "Garlic Butter Prawns",
         "description": "Sautéed jumbo prawns in garlic, butter, and white wine glaze.",
         "price": "15.50",
@@ -81,7 +81,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-9",
-        "category": "STARTER",
+        "category": "Starter",
         "title": "Caprese Salad",
         "description": "Fresh heirloom tomatoes, buffalo mozzarella, and fresh basil drizzle.",
         "price": "12.00",
@@ -91,7 +91,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-10",
-        "category": "STARTER",
+        "category": "Starter",
         "title": "Crispy Calamari",
         "description": "Lightly battered squid rings served with house spicy marinara.",
         "price": "13.50",
@@ -101,7 +101,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-11",
-        "category": "STARTER",
+        "category": "Starter",
         "title": "Stuffed Mushrooms",
         "description": "Baked button mushrooms filled with herbs, garlic, and cream cheese.",
         "price": "10.50",
@@ -111,7 +111,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-12",
-        "category": "MAIN",
+        "category": "Main Course",
         "title": "Truffle Wagyu Steak",
         "description": "Prime aged Wagyu beef topped with black truffle butter.",
         "price": "45.00",
@@ -121,7 +121,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-13",
-        "category": "MAIN",
+        "category": "Main Course",
         "title": "Lobster Thermidor",
         "description": "Fresh lobster baked in a rich cognac and mustard cream sauce.",
         "price": "52.00",
@@ -131,7 +131,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-14",
-        "category": "MAIN",
+        "category": "Main Course",
         "title": "Grilled Atlantic Salmon",
         "description": "Pan-seared salmon fillet over lemon asparagus risotto.",
         "price": "24.00",
@@ -141,7 +141,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-15",
-        "category": "MAIN",
+        "category": "Main Course",
         "title": "Wild Mushroom Pasta",
         "description": "Fettuccine with roasted forest mushrooms in light garlic cream.",
         "price": "18.50",
@@ -151,7 +151,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-16",
-        "category": "MAIN",
+        "category": "Main Course",
         "title": "Chicken Parmesan",
         "description": "Breaded chicken breast topped with melted mozzarella and marinara.",
         "price": "19.00",
@@ -161,7 +161,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-17",
-        "category": "MAIN",
+        "category": "Main Course",
         "title": "BBQ Prime Ribs",
         "description": "Slow-roasted pork ribs glazed with signature honey smoked BBQ sauce.",
         "price": "28.00",
@@ -171,7 +171,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-18",
-        "category": "MAIN",
+        "category": "Main Course",
         "title": "Lamb Chops Supreme",
         "description": "Herb-crusted lamb chops served with roasted red potatoes.",
         "price": "34.00",
@@ -181,7 +181,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-19",
-        "category": "DESSERT",
+        "category": "Dessert",
         "title": "Chef Special Caviar Tart",
         "description": "Sweet dessert tart shell layered with fruit caviar pearls.",
         "price": "16.00",
@@ -191,7 +191,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-20",
-        "category": "DESSERT",
+        "category": "Dessert",
         "title": "Classic Tiramisu",
         "description": "Traditional Italian espresso-soaked ladyfingers with mascarpone.",
         "price": "9.00",
@@ -201,7 +201,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-21",
-        "category": "DESSERT",
+        "category": "Dessert",
         "title": "New York Cheesecake",
         "description": "Rich creamy cheesecake topped with fresh berry compote.",
         "price": "9.50",
@@ -211,7 +211,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-22",
-        "category": "DESSERT",
+        "category": "Dessert",
         "title": "Matcha Green Tea Pudding",
         "description": "Silky smooth Japanese matcha pudding with sweet red bean.",
         "price": "8.00",
@@ -221,7 +221,7 @@ INITIAL_MENU_ITEMS = [
     },
     {
         "seed_key": "item-23",
-        "category": "DESSERT",
+        "category": "Dessert",
         "title": "Mango Passion Creme",
         "description": "Chilled tropical cream layered with real mango puree.",
         "price": "10.00",

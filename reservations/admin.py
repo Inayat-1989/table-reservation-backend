@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import (
     BrowserSession,
     Customer,
+    MenuCategory,
     MenuItem,
     Reservation,
     ReservationOTP,
@@ -78,15 +79,32 @@ class TimeSlotAdmin(admin.ModelAdmin):
     ordering = ("starts_at",)
 
 
+@admin.register(MenuCategory)
+class MenuCategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "is_active", "created_at", "updated_at")
+    list_filter = ("is_active", "created_at")
+    search_fields = ("name", "description")
+    readonly_fields = ("created_at", "updated_at")
+    list_editable = ("is_active",)
+
+
 @admin.register(MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
-    list_display = ("id","title", "category", "price", "is_special", "is_available")
-    list_filter = ("category", "is_special", "is_available")
-    search_fields = ("title", "description")
-    list_editable = (
+    list_display = (
+        "id",
+        "title",
+        "category",
         "price",
         "is_special",
         "is_available",
+        "is_deleted",
+    )
+    list_filter = ("category", "is_special", "is_available", "is_deleted")
+    search_fields = ("title", "description", "is_deleted")
+    list_editable = (
+        "is_special",
+        "is_available",
+        "is_deleted",
     )  # Quick toggles from list view
 
 

@@ -26,6 +26,7 @@ from reservations.services.slot_service import (
     release_seats,
     reserve_seats,
 )
+from reservations.tasks import send_reservation_otp_email_task
 from reservations.utils.otp import verify_otp
 
 
@@ -732,10 +733,10 @@ def finalize_draft_reservation(
 
     # ---------------------------------------------------------
     # 8. Send email only after transaction commits
+    # The Celery worker performs the actual SMTP operation asynchronously.
     # ---------------------------------------------------------
-
     transaction.on_commit(
-        lambda: send_reservation_otp_email(
+        lambda: send_reservation_otp_email_task.delay(
             recipient_email=reservation.customer.email,
             customer_name=reservation.customer.full_name,
             otp=raw_otp,
