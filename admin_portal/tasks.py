@@ -1,7 +1,7 @@
 from celery import shared_task
 
-from reservations.services.email_service import (
-    send_reservation_otp_email,
+from admin_portal.services.email_service import (
+    send_admin_otp_email,
 )
 
 
@@ -11,19 +11,17 @@ from reservations.services.email_service import (
     retry_backoff=True,
     retry_kwargs={"max_retries": 3},
 )
-def send_reservation_otp_email_task(
+def send_admin_otp_email_task(
     self,
     *,
     recipient_email,
-    customer_name,
+    admin_name,
     otp,
-    reservation_reference,
     expires_at,
 ):
-    send_reservation_otp_email(
+    send_admin_otp_email(
         recipient_email=recipient_email,
-        customer_name=customer_name,
+        admin_name=admin_name,
         otp=otp,
-        reservation_reference=reservation_reference,
         expires_at=expires_at,
     )

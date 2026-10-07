@@ -118,10 +118,7 @@ class ReservationListView(APIView):
             None,
         )
 
-        if customer is None:
-            reservations = []
-        else:
-            reservations = get_customer_reservations(customer)
+        reservations = [] if customer is None else get_customer_reservations(customer)
 
         serializer = ReservationResponseSerializer(
             reservations,

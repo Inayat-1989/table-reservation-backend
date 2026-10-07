@@ -47,6 +47,10 @@ ignore = [
     "PLR0913",
     "RUF059",
     "EM102",
+    "B904",
+    "ARG002",
+    "DTZ007",
+    "PLR0911",
     "TRY004",
 ]
 
@@ -63,11 +67,6 @@ ignore = [
 
 # 4. Relax strict rules inside settings.py (e.g., security secrets, long lines, or string types)
 "**/settings.py" = ["E501", "RUF012", "F403", "F405", "S105", "S106", "S107", "S108", "S201"]
-
-# 5. Safe rule bypasses for specific production files
-"accounts/models.py" = ["DJ001"]
-"app.py" = ["S201", "S105", "E501"]
-"voting_app/views.py" = ["T201"]
 
 [tool.ruff.format]
 # Keep formatting clean and consistent with Black style formatting standards

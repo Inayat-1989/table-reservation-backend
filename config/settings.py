@@ -54,6 +54,10 @@ ADMIN_OTP_EXPIRY_MINUTES = 5
 
 ADMIN_OTP_MAX_ATTEMPTS = 5
 
+ADMIN_SESSION_COOKIE = "admin_session"
+
+ADMIN_API_PREFIX = "/api/v1/admin/"
+
 
 # Application definition
 
@@ -80,6 +84,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "admin_portal.middleware.AdminAuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -184,11 +189,6 @@ STATIC_URL = "static/"
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-# MAILERS = {
-#     "default": {
-#         "BACKEND": "django.core.mail.backends.console.EmailBackend",
-#     },
-# }
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"

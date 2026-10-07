@@ -11,6 +11,9 @@ from admin_portal.models import (
 from admin_portal.services.session_service import (
     create_admin_session,
 )
+from admin_portal.tasks import (
+    send_admin_otp_email_task,
+)
 from admin_portal.utils.otp import (
     generate_otp,
     hash_otp,
@@ -128,11 +131,8 @@ def create_login_challenge(admin):
     }
 
 
+@transaction.atomic
 def login(identifier, password):
-    """Authenticate an admin and create a 2FA challenge.
-
-    This method does NOT create an AdminSession.
-    """
     admin = authenticate_admin(
         identifier=identifier,
         password=password,
@@ -140,9 +140,20 @@ def login(identifier, password):
 
     challenge_data = create_login_challenge(admin)
 
+    transaction.on_commit(
+        lambda: send_admin_otp_email_task(
+            recipient_email=admin.email,
+            admin_name=admin.first_name,
+            otp=challenge_data["otp"],
+            expires_at=challenge_data["expires_at"],
+        )
+    )
+
     return {
         "admin": admin,
-        **challenge_data,
+        "challenge": challenge_data["challenge"],
+        "challenge_token": challenge_data["challenge_token"],
+        "expires_at": challenge_data["expires_at"],
     }
 
 
