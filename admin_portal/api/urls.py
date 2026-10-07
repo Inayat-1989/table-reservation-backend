@@ -8,6 +8,8 @@ from admin_portal.api.views.authentication import (
 )
 from admin_portal.api.views.dashboard import (
     AdminDashboardView,
+    AdminPeakReservationHoursView,
+    AdminReservationSlotPopularityView,
     AdminReservationTrendView,
 )
 
@@ -41,5 +43,15 @@ urlpatterns = [
         "dashboard/trends/",
         AdminReservationTrendView.as_view(),
         name="admin-dashboard-trends",
+    ),
+    path(
+        "dashboard/peak-hours/",
+        AdminPeakReservationHoursView.as_view(),
+        name="admin-dashboard-peak-hours",
+    ),
+    path(
+        "dashboard/slot-popularity/",
+        AdminReservationSlotPopularityView.as_view(),
+        name="admin-dashboard-slot-popularity",
     ),
 ]

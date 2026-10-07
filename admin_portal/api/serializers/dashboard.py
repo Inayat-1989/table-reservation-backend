@@ -28,3 +28,14 @@ class AdminDashboardSummarySerializer(serializers.Serializer):
 class AdminReservationTrendSerializer(serializers.Serializer):
     date = serializers.DateField()
     reservation_count = serializers.IntegerField()
+
+
+class AdminPeakReservationHourSerializer(serializers.Serializer):
+    hour = serializers.IntegerField()
+    reservation_count = serializers.IntegerField()
+
+
+class AdminReservationSlotPopularitySerializer(serializers.Serializer):
+    hour = serializers.IntegerField()
+    minute = serializers.IntegerField()
+    reservation_count = serializers.IntegerField()

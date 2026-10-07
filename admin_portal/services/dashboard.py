@@ -1,10 +1,13 @@
 from datetime import datetime, time, timedelta
+from zoneinfo import ZoneInfo
 
 from django.db.models import Count
-from django.db.models.functions import TruncDate
+from django.db.models.functions import ExtractHour, ExtractMinute, TruncDate
 from django.utils import timezone
 
 from reservations.models import Reservation
+
+RESTAURANT_TIMEZONE = ZoneInfo("Asia/Karachi")
 
 
 def get_dashboard_summary():
@@ -107,7 +110,7 @@ def get_reservation_trends(days=7):
         .annotate(
             reservation_date=TruncDate(
                 "slot__starts_at",
-                tzinfo=timezone.get_current_timezone(),
+                tzinfo=RESTAURANT_TIMEZONE,
             ),
         )
         .values("reservation_date")
@@ -137,3 +140,72 @@ def get_reservation_trends(days=7):
         )
 
     return trends
+
+
+def get_peak_reservation_hours():
+    reservations = (
+        Reservation.objects.filter(
+            status=Reservation.Status.CONFIRMED,
+        )
+        .annotate(
+            reservation_hour=ExtractHour(
+                "slot__starts_at",
+                tzinfo=RESTAURANT_TIMEZONE,
+            ),
+        )
+        .values(
+            "reservation_hour",
+        )
+        .annotate(
+            reservation_count=Count("id"),
+        )
+        .order_by(
+            "reservation_hour",
+        )
+    )
+
+    return [
+        {
+            "hour": item["reservation_hour"],
+            "reservation_count": item["reservation_count"],
+        }
+        for item in reservations
+    ]
+
+
+def get_reservation_slot_popularity():
+    reservations = (
+        Reservation.objects.filter(
+            status=Reservation.Status.CONFIRMED,
+        )
+        .annotate(
+            reservation_hour=ExtractHour(
+                "slot__starts_at",
+                tzinfo=RESTAURANT_TIMEZONE,
+            ),
+            reservation_minute=ExtractMinute(
+                "slot__starts_at",
+                tzinfo=RESTAURANT_TIMEZONE,
+            ),
+        )
+        .values(
+            "reservation_hour",
+            "reservation_minute",
+        )
+        .annotate(
+            reservation_count=Count("id"),
+        )
+        .order_by(
+            "reservation_hour",
+            "reservation_minute",
+        )
+    )
+
+    return [
+        {
+            "hour": item["reservation_hour"],
+            "minute": item["reservation_minute"],
+            "reservation_count": item["reservation_count"],
+        }
+        for item in reservations
+    ]

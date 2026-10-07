@@ -4,16 +4,14 @@ from rest_framework.views import APIView
 from admin_portal.api.permissions import IsAuthenticatedAdmin
 from admin_portal.api.serializers.dashboard import (
     AdminDashboardSummarySerializer,
+    AdminPeakReservationHourSerializer,
+    AdminReservationSlotPopularitySerializer,
+    AdminReservationTrendSerializer,
 )
 from admin_portal.services.dashboard import (
     get_dashboard_summary,
-)
-
-from admin_portal.api.serializers.dashboard import (
-    AdminReservationTrendSerializer,
-)
-
-from admin_portal.services.dashboard import (
+    get_peak_reservation_hours,
+    get_reservation_slot_popularity,
     get_reservation_trends,
 )
 
@@ -45,6 +43,42 @@ class AdminReservationTrendView(APIView):
 
         serializer = AdminReservationTrendSerializer(
             trends,
+            many=True,
+        )
+
+        return Response(
+            serializer.data,
+        )
+
+
+class AdminPeakReservationHoursView(APIView):
+    permission_classes = [
+        IsAuthenticatedAdmin,
+    ]
+
+    def get(self, request):
+        peak_hours = get_peak_reservation_hours()
+
+        serializer = AdminPeakReservationHourSerializer(
+            peak_hours,
+            many=True,
+        )
+
+        return Response(
+            serializer.data,
+        )
+
+
+class AdminReservationSlotPopularityView(APIView):
+    permission_classes = [
+        IsAuthenticatedAdmin,
+    ]
+
+    def get(self, request):
+        slot_popularity = get_reservation_slot_popularity()
+
+        serializer = AdminReservationSlotPopularitySerializer(
+            slot_popularity,
             many=True,
         )
 

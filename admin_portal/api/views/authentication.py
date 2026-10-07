@@ -7,6 +7,7 @@ from admin_portal.api.permissions import (
 )
 from admin_portal.api.serializers.authentication import (
     AdminLoginSerializer,
+    AdminMeSerializer,
     AdminOTPVerifySerializer,
 )
 from admin_portal.services.authentication import (
@@ -20,12 +21,6 @@ from admin_portal.services.authentication import (
 )
 from admin_portal.services.session_service import (
     revoke_admin_session,
-)
-from rest_framework.permissions import AllowAny
-
-from admin_portal.api.permissions import IsAuthenticatedAdmin
-from admin_portal.api.serializers.authentication import (
-    AdminMeSerializer,
 )
 
 # required_admin_roles = (
@@ -183,6 +178,7 @@ class AdminLogoutView(APIView):
         )
 
         return response
+
 
 class AdminMeView(APIView):
     permission_classes = [IsAuthenticatedAdmin]
