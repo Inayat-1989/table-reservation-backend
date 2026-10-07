@@ -36,9 +36,7 @@ from reservations.utils.cookies import (
 
 
 class OTPResendView(APIView):
-    """
-    Request a new OTP for a browser-owned pending reservation.
-    """
+    """Request a new OTP for a browser-owned pending reservation."""
 
     def post(self, request):
 
@@ -46,9 +44,7 @@ class OTPResendView(APIView):
 
         serializer.is_valid(raise_exception=True)
 
-        browser_session, new_token = get_or_create_browser_session(
-            request.COOKIES.get(BROWSER_SESSION_COOKIE)
-        )
+        browser_session, new_token = get_or_create_browser_session(request.COOKIES.get(BROWSER_SESSION_COOKIE))
 
         reservation = get_reservation_by_reference(
             serializer.validated_data["reference_code"],
@@ -116,9 +112,7 @@ class OTPResendView(APIView):
 
 
 class OTPVerifyView(APIView):
-    """
-    Verify an OTP and confirm the browser-owned reservation.
-    """
+    """Verify an OTP and confirm the browser-owned reservation."""
 
     def post(self, request):
 
@@ -134,9 +128,7 @@ class OTPVerifyView(APIView):
         # 2. Get browser session
         # ---------------------------------------------------------
 
-        browser_session, new_token = get_or_create_browser_session(
-            request.COOKIES.get(BROWSER_SESSION_COOKIE)
-        )
+        browser_session, new_token = get_or_create_browser_session(request.COOKIES.get(BROWSER_SESSION_COOKIE))
 
         # ---------------------------------------------------------
         # 3. Find reservation owned by this browser

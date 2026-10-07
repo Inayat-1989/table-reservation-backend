@@ -47,9 +47,7 @@ class Command(BaseCommand):
             category = category_map.get(category_name)
 
             if category is None:
-                self.stdout.write(
-                    self.style.ERROR(f"Category '{category_name}' does not exist.")
-                )
+                self.stdout.write(self.style.ERROR(f"Category '{category_name}' does not exist."))
                 continue
 
             item_defaults = {
@@ -75,14 +73,6 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS("Menu initialization complete."))
 
-        self.stdout.write(
-            f"Categories - "
-            f"Created: {created_category_count}, "
-            f"Already existed: {existing_category_count}"
-        )
+        self.stdout.write(f"Categories - Created: {created_category_count}, Already existed: {existing_category_count}")
 
-        self.stdout.write(
-            f"Menu Items - "
-            f"Created: {created_item_count}, "
-            f"Already existed: {existing_item_count}"
-        )
+        self.stdout.write(f"Menu Items - Created: {created_item_count}, Already existed: {existing_item_count}")

@@ -57,16 +57,15 @@ def create_pending_reservation(
     selected_menu_item_ids=None,
     customer_note="",
 ):
-    """
-    Create a pending reservation, reserve its seats, and issue an OTP.
+    """Create a pending reservation, reserve its seats, and issue an OTP.
 
     The OTP is sent to the customer's email only after the database
     transaction successfully commits.
 
     Returns:
         Reservation
-    """
 
+    """
     selected_menu_item_ids = selected_menu_item_ids or []
 
     # ---------------------------------------------------------
@@ -74,9 +73,7 @@ def create_pending_reservation(
     # ---------------------------------------------------------
 
     if len(selected_menu_item_ids) != len(set(selected_menu_item_ids)):
-        raise InvalidMenuSelectionError(
-            "A menu item cannot be selected more than once."
-        )
+        raise InvalidMenuSelectionError("A menu item cannot be selected more than once.")
 
     with transaction.atomic():
         # -----------------------------------------------------
@@ -97,9 +94,7 @@ def create_pending_reservation(
         menu_items = list(get_available_menu_items_by_ids(selected_menu_item_ids))
 
         if len(menu_items) != len(selected_menu_item_ids):
-            raise InvalidMenuSelectionError(
-                "One or more selected menu items are unavailable."
-            )
+            raise InvalidMenuSelectionError("One or more selected menu items are unavailable.")
 
         # -----------------------------------------------------
         # Slot
@@ -120,9 +115,7 @@ def create_pending_reservation(
         special_menu_eligible = slot.starts_at >= now + timedelta(hours=24)
 
         if not special_menu_eligible and any(item.is_special for item in menu_items):
-            raise InvalidMenuSelectionError(
-                "Special menu items require a reservation at least 24 hours in advance."
-            )
+            raise InvalidMenuSelectionError("Special menu items require a reservation at least 24 hours in advance.")
 
         # -----------------------------------------------------
         # Reserve seats
@@ -172,11 +165,7 @@ def confirm_reservation(
     reservation_id,
     submitted_otp,
 ):
-    """
-    Verify the reservation OTP and confirm the reservation
-    as one atomic state transition.
-    """
-
+    """Verify the reservation OTP and confirm the reservation as one atomic state transition."""
     error = None
     confirmed_reservation = None
 
@@ -197,9 +186,7 @@ def confirm_reservation(
         # -----------------------------------------------------
 
         if reservation.status != Reservation.Status.PENDING_VERIFICATION:
-            error = ReservationStateError(
-                "This reservation is no longer pending verification."
-            )
+            error = ReservationStateError("This reservation is no longer pending verification.")
 
         elif reservation.expires_at and reservation.expires_at <= now:
             error = ReservationStateError("This reservation has expired.")
@@ -210,16 +197,11 @@ def confirm_reservation(
             # -------------------------------------------------
 
             otp_record = (
-                reservation.otp_attempts_history.select_for_update()
-                .filter(is_active=True)
-                .order_by("-sent_at")
-                .first()
+                reservation.otp_attempts_history.select_for_update().filter(is_active=True).order_by("-sent_at").first()
             )
 
             if otp_record is None:
-                error = OTPNotAvailableError(
-                    "No active OTP exists for this reservation."
-                )
+                error = OTPNotAvailableError("No active OTP exists for this reservation.")
 
             elif otp_record.expires_at <= now:
                 otp_record.is_active = False
@@ -233,9 +215,7 @@ def confirm_reservation(
 
                 otp_record.save(update_fields=["is_active"])
 
-                error = OTPRateLimitError(
-                    "The maximum number of OTP attempts has been reached."
-                )
+                error = OTPRateLimitError("The maximum number of OTP attempts has been reached.")
 
             else:
                 # -------------------------------------------------
@@ -262,9 +242,7 @@ def confirm_reservation(
                     otp_record.save(update_fields=update_fields)
 
                     if otp_record.attempts >= settings.OTP_MAX_ATTEMPTS:
-                        error = OTPRateLimitError(
-                            "The maximum number of OTP attempts has been reached."
-                        )
+                        error = OTPRateLimitError("The maximum number of OTP attempts has been reached.")
 
                     else:
                         error = OTPInvalidError("The OTP is incorrect.")
@@ -311,23 +289,15 @@ def confirm_reservation(
 
 
 def cancel_reservation(reservation):
-    """
-    Cancel a pending or confirmed reservation and release
-    its seats exactly once.
-    """
-
+    """Cancel a pending or confirmed reservation and release its seats exactly once."""
     with transaction.atomic():
-        locked_reservation = Reservation.objects.select_for_update().get(
-            id=reservation.id
-        )
+        locked_reservation = Reservation.objects.select_for_update().get(id=reservation.id)
 
         if locked_reservation.status not in (
             Reservation.Status.PENDING_VERIFICATION,
             Reservation.Status.CONFIRMED,
         ):
-            raise ReservationStateError(
-                "Only pending or confirmed reservations can be cancelled."
-            )
+            raise ReservationStateError("Only pending or confirmed reservations can be cancelled.")
 
         release_seats(
             locked_reservation.slot_id,
@@ -344,11 +314,7 @@ def cancel_reservation(reservation):
         )
 
         # Invalidate outstanding OTPs.
-        (
-            locked_reservation.otp_attempts_history.filter(is_active=True).update(
-                is_active=False
-            )
-        )
+        (locked_reservation.otp_attempts_history.filter(is_active=True).update(is_active=False))
 
         return locked_reservation
 
@@ -356,14 +322,10 @@ def cancel_reservation(reservation):
 def expire_pending_reservation(
     reservation_id,
 ):
-    """
-    Expire a pending reservation after its verification
-    deadline.
+    """Expire a pending reservation after its verification deadline.
 
-    Returns the updated reservation, or None if it was not
-    eligible for expiration.
+    Returns the updated reservation, or None if it was not eligible for expiration.
     """
-
     with transaction.atomic():
         reservation = Reservation.objects.select_for_update().get(id=reservation_id)
 
@@ -389,11 +351,7 @@ def expire_pending_reservation(
             ]
         )
 
-        (
-            reservation.otp_attempts_history.filter(is_active=True).update(
-                is_active=False
-            )
-        )
+        (reservation.otp_attempts_history.filter(is_active=True).update(is_active=False))
 
         return reservation
 
@@ -432,9 +390,7 @@ def create_draft_reservation(
     ).first()
 
     if existing_reservation:
-        raise DuplicateReservationError(
-            "You already have a reservation for this date and time slot."
-        )
+        raise DuplicateReservationError("You already have a reservation for this date and time slot.")
 
     now = timezone.now()
 
@@ -456,9 +412,7 @@ def create_draft_reservation(
         .first()
     )
 
-    if existing_draft and (
-        existing_draft.expires_at is not None and existing_draft.expires_at <= now
-    ):
+    if existing_draft and (existing_draft.expires_at is not None and existing_draft.expires_at <= now):
         existing_draft.status = Reservation.Status.EXPIRED
 
         existing_draft.save(
@@ -515,14 +469,12 @@ def update_draft_menu(
     browser_session,
     selected_menu_item_ids,
 ):
-    """
-    Update the selected menu items of the active draft.
+    """Update the selected menu items of the active draft.
 
     The draft must belong to the supplied browser session.
     Menu item IDs are validated against currently available
     menu items.
     """
-
     reservation = (
         Reservation.objects.select_for_update()
         .select_related(
@@ -557,16 +509,10 @@ def update_draft_menu(
     menu_items = list(get_available_menu_items_by_ids(selected_menu_item_ids))
 
     if len(menu_items) != len(selected_menu_item_ids):
-        raise InvalidMenuSelectionError(
-            "One or more selected menu items are unavailable."
-        )
+        raise InvalidMenuSelectionError("One or more selected menu items are unavailable.")
 
-    if not reservation.special_menu_eligible and any(
-        item.is_special for item in menu_items
-    ):
-        raise InvalidMenuSelectionError(
-            "Special menu items require a reservation at least 24 hours in advance."
-        )
+    if not reservation.special_menu_eligible and any(item.is_special for item in menu_items):
+        raise InvalidMenuSelectionError("Special menu items require a reservation at least 24 hours in advance.")
 
     reservation.selected_menu_items = [item.id for item in menu_items]
 
@@ -585,8 +531,7 @@ def finalize_draft_reservation(
     *,
     browser_session,
 ):
-    """
-    Finalize the current DRAFT reservation.
+    """Finalize the current DRAFT reservation.
 
     DRAFT
         -> PENDING_VERIFICATION
@@ -602,7 +547,6 @@ def finalize_draft_reservation(
     - issues an OTP
     - schedules the OTP email after commit
     """
-
     reservation = (
         Reservation.objects.select_for_update()
         .select_related(
@@ -645,16 +589,12 @@ def finalize_draft_reservation(
     selected_menu_item_ids = reservation.selected_menu_items or []
 
     if len(selected_menu_item_ids) != len(set(selected_menu_item_ids)):
-        raise InvalidMenuSelectionError(
-            "A menu item cannot be selected more than once."
-        )
+        raise InvalidMenuSelectionError("A menu item cannot be selected more than once.")
 
     menu_items = list(get_available_menu_items_by_ids(selected_menu_item_ids))
 
     if len(menu_items) != len(selected_menu_item_ids):
-        raise InvalidMenuSelectionError(
-            "One or more selected menu items are unavailable."
-        )
+        raise InvalidMenuSelectionError("One or more selected menu items are unavailable.")
 
     # ---------------------------------------------------------
     # 3. Validate slot again
@@ -681,9 +621,7 @@ def finalize_draft_reservation(
     )
 
     if existing_reservation:
-        raise DuplicateReservationError(
-            "You already have a reservation for this date and time slot."
-        )
+        raise DuplicateReservationError("You already have a reservation for this date and time slot.")
 
     # ---------------------------------------------------------
     # 4. Recalculate special-menu eligibility
@@ -692,9 +630,7 @@ def finalize_draft_reservation(
     special_menu_eligible = (slot.starts_at - now).total_seconds() >= 24 * 60 * 60
 
     if not special_menu_eligible and any(item.is_special for item in menu_items):
-        raise InvalidMenuSelectionError(
-            "Special menu items require a reservation at least 24 hours in advance."
-        )
+        raise InvalidMenuSelectionError("Special menu items require a reservation at least 24 hours in advance.")
 
     # ---------------------------------------------------------
     # 5. Reserve seats

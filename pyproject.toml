@@ -1,0 +1,75 @@
+[tool.ruff]
+# Standard recommended layout constraint matching standard tools
+target-version = "py312" # Match your Python version
+line-length = 120
+
+[tool.ruff.lint]
+# 1. Enable absolutely every single rule Ruff has to offer
+select = ["ALL"]
+
+# 2. Exclude known structural contradictions and rule conflicts
+ignore = [
+    "D203",    # Conflicts with D211 (one blank line before class)
+    "D213",    # Conflicts with D212 (multi-line docstring summary placement)
+    "D100",    # Missing docstring in public module (Annoying for every Django file)
+    "D104",    # Missing docstring in public package (__init__.py)
+    "D106",    # Missing docstring in public nested class (e.g., Django's class Meta)
+    "COM812",  # Conflicts with Ruff's own auto-formatting engine
+    "ISC001",  # Conflicts with Ruff's own auto-formatting engine
+    "CPY001",  # Stops requiring a copyright notice at the top of every single file
+    "PT009",   # Stops telling you to use pytest 'assert' instead of Django's unittest 'assertIn'
+    "D101",    # Stops requiring docstrings for your public classes
+    "D102",    # Stops requiring docstrings for public methods
+    "ANN201",  # Stops requiring return type hints (like -> None) for functions
+    "D103",    # No function docstrings (Fixes the missing docstrings in views and app.py)
+    "D105",    # No magic method docstrings (Fixes __str__ warning)
+    "ANN001",  # No function argument type annotations (Fixes 'request' and 'exc' type warnings)
+    "ANN204",  # No magic method return annotations (Fixes __str__ type warning)
+    "ARG001",  # Allow unused function arguments (Fixes the Flask 'exc' argument warning)
+    "PTH118",  # Allow os.path.join (No need to force Pathlib / operator)
+    "PTH120",  # Allow os.path.dirname (No need to force Pathlib .parent)
+    "TD002",   # No author required in TODO comments
+    "TD003",   # No issue links required for TODO comments
+    "FIX002",  # Allow using raw TODO comments without raising an error
+    "ANN002",  # No type annotations required for *args
+    "ANN003",  # No type annotations required for **kwargs
+    "ANN202",  # No return type annotations required for private/inner functions (Fixes wrapper)
+    "D400",    # Stops demanding that the first line of a docstring must end with a period
+    "D401",    # Stops demanding imperative mood (e.g., forces "Fetch info" instead of "Fetches info")
+    "D415",    # Stops demanding specific punctuation markers at the end of a docstring line
+    "DJ012",   # Bypasses the strict Django Style Guide order for model methods (clean/save/custom)
+    "DTZ001",  # Allows initializing a datetime object without a mandatory timezone parameter
+    "EM101",   # Allows passing literal text directly inside exceptions instead of variables
+    "RUF012",  # Allows mutable defaults (like lists or choice arrays) on classes globally
+    "TRY003",  # Allows customizing long descriptive text messages inside exception class initializers
+    "RET504",
+    "PLR0912",
+    "PLR0913",
+    "RUF059",
+    "EM102",
+    "TRY004",
+]
+
+# 3. Handle special Django files gracefully
+[tool.ruff.lint.per-file-ignores]
+# Ignore auto-generated Django migration files entirely to avoid errors
+"**/migrations/*.py" = ["ALL"]
+# Ignore tests.py files to avoid false positives on test-specific code patterns
+"voting_app/tests.py" = ["ALL"]
+"accounts/tests.py" = ["ALL"]
+"tests.py" = ["ALL"]
+"tests/**" = ["ALL"]
+ 
+
+# 4. Relax strict rules inside settings.py (e.g., security secrets, long lines, or string types)
+"**/settings.py" = ["E501", "RUF012", "F403", "F405", "S105", "S106", "S107", "S108", "S201"]
+
+# 5. Safe rule bypasses for specific production files
+"accounts/models.py" = ["DJ001"]
+"app.py" = ["S201", "S105", "E501"]
+"voting_app/views.py" = ["T201"]
+
+[tool.ruff.format]
+# Keep formatting clean and consistent with Black style formatting standards
+quote-style = "double"
+indent-style = "space"

@@ -10,10 +10,7 @@ def send_reservation_otp_email(
     reservation_reference,
     expires_at,
 ):
-    """
-    Send the reservation verification OTP to the customer.
-    """
-
+    """Send the reservation verification OTP to the customer."""
     subject = "Your Reservation Verification Code"
 
     text_content = f"""

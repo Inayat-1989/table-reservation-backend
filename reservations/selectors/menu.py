@@ -2,15 +2,13 @@ from reservations.models import MenuItem
 
 
 def get_available_menu_items():
-    """
-    Return all menu items currently available to customers.
-    """
+    """Return all menu items currently available to customers."""
     return MenuItem.objects.filter(is_available=True).order_by("category", "title")
 
 
 def get_menu_item_by_id(menu_item_id):
-    """
-    Return an available menu item by its ID.
+    """Return an available menu item by its ID.
+
     Return None if it doesn't exist or isn't available.
     """
     return MenuItem.objects.filter(
@@ -21,8 +19,7 @@ def get_menu_item_by_id(menu_item_id):
 
 
 def get_available_menu_items_by_ids(menu_item_ids):
-    """
-    Return available menu items matching a collection of IDs.
+    """Return available menu items matching a collection of IDs.
 
     Useful when validating the menu items selected during
     reservation creation.

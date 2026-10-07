@@ -29,14 +29,14 @@ class OTPNotAvailableError(OTPServiceError):
 
 
 def issue_otp(reservation_id):
-    """
-    Create and store a new OTP for a pending reservation.
+    """Create and store a new OTP for a pending reservation.
 
     Returns:
         (otp_record, raw_otp)
 
     The raw OTP is returned only for internal email-delivery code.
     Never include it in an API response.
+
     """
     with transaction.atomic():
         reservation = Reservation.objects.select_for_update().get(id=reservation_id)
@@ -44,9 +44,7 @@ def issue_otp(reservation_id):
         now = timezone.now()
 
         if reservation.status != Reservation.Status.PENDING_VERIFICATION:
-            raise OTPServiceError(
-                "An OTP can only be issued for a pending reservation."
-            )
+            raise OTPServiceError("An OTP can only be issued for a pending reservation.")
 
         if reservation.expires_at and reservation.expires_at <= now:
             raise OTPExpiredError("This reservation has expired.")
@@ -64,9 +62,7 @@ def issue_otp(reservation_id):
         total_sent = reservation.otp_attempts_history.count()
 
         if total_sent >= settings.OTP_MAX_SENDS:
-            raise OTPRateLimitError(
-                "The maximum number of OTP requests has been reached."
-            )
+            raise OTPRateLimitError("The maximum number of OTP requests has been reached.")
 
         # Invalidate previous active codes before issuing a new one.
         reservation.otp_attempts_history.filter(is_active=True).update(is_active=False)
@@ -86,8 +82,8 @@ def issue_otp(reservation_id):
 
 
 def verify_reservation_otp(reservation_id, submitted_otp):
-    """
-    Verify an OTP and persist attempt counters even when verification fails.
+    """Verify an OTP and persist attempt counters even when verification fails.
+
     Returns the ReservationOTP record on success.
     """
     error = None
@@ -99,25 +95,18 @@ def verify_reservation_otp(reservation_id, submitted_otp):
         now = timezone.now()
 
         if reservation.status != Reservation.Status.PENDING_VERIFICATION:
-            error = OTPServiceError(
-                "This reservation is not awaiting OTP verification."
-            )
+            error = OTPServiceError("This reservation is not awaiting OTP verification.")
 
         elif reservation.expires_at and reservation.expires_at <= now:
             error = OTPExpiredError("This reservation has expired.")
 
         else:
             otp_record = (
-                reservation.otp_attempts_history.select_for_update()
-                .filter(is_active=True)
-                .order_by("-sent_at")
-                .first()
+                reservation.otp_attempts_history.select_for_update().filter(is_active=True).order_by("-sent_at").first()
             )
 
             if otp_record is None:
-                error = OTPNotAvailableError(
-                    "No active OTP exists. Request a new code if permitted."
-                )
+                error = OTPNotAvailableError("No active OTP exists. Request a new code if permitted.")
 
             elif otp_record.expires_at <= now:
                 otp_record.is_active = False
@@ -127,9 +116,7 @@ def verify_reservation_otp(reservation_id, submitted_otp):
             elif otp_record.attempts >= settings.OTP_MAX_ATTEMPTS:
                 otp_record.is_active = False
                 otp_record.save(update_fields=["is_active"])
-                error = OTPRateLimitError(
-                    "The maximum number of verification attempts has been reached."
-                )
+                error = OTPRateLimitError("The maximum number of verification attempts has been reached.")
 
             else:
                 otp_record.attempts += 1

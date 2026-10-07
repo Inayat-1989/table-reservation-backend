@@ -11,15 +11,14 @@ from reservations.utils.security import (
 
 
 def create_browser_session():
-    """
-    Create a new browser session.
+    """Create a new browser session.
 
     Returns:
         tuple[BrowserSession, str]
         The database object and the raw token that
         should be sent to the browser as a cookie.
-    """
 
+    """
     raw_token = generate_browser_session_token()
 
     token_hash = hash_browser_session_token(raw_token)
@@ -35,11 +34,7 @@ def create_browser_session():
 
 
 def get_browser_session(raw_token):
-    """
-    Find a valid browser session using the raw token
-    received from the browser cookie.
-    """
-
+    """Find a valid browser session using the raw token received from the browser cookie."""
     if not raw_token:
         return None
 
@@ -60,11 +55,7 @@ def get_or_create_customer(
     email,
     phone,
 ):
-    """
-    Get the customer belonging to the browser session,
-    or create one if this is the first reservation.
-    """
-
+    """Get the customer belonging to the browser session, or create one if this is the first reservation."""
     customer, created = Customer.objects.get_or_create(
         browser_session=browser_session,
         defaults={
@@ -90,14 +81,14 @@ def get_or_create_customer(
 
 
 def get_or_create_browser_session(raw_token):
-    """
-    Return an existing valid browser session or create a new one.
+    """Return an existing valid browser session or create a new one.
 
     Returns:
         tuple[BrowserSession, str | None]
 
     The second value is a newly generated raw token when a new
     session was created, otherwise None.
+
     """
     existing_session = get_browser_session(raw_token)
 

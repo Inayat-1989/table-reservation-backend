@@ -53,9 +53,7 @@ class ReservationCreateSerializer(serializers.Serializer):
 
     def validate_selected_menu_item_ids(self, value):
         if len(value) != len(set(value)):
-            raise serializers.ValidationError(
-                "A menu item cannot be selected more than once."
-            )
+            raise serializers.ValidationError("A menu item cannot be selected more than once.")
         return value
 
 
@@ -161,8 +159,6 @@ class ReservationDraftMenuUpdateSerializer(serializers.Serializer):
 
     def validate_selected_menu_item_ids(self, value):
         if len(value) != len(set(value)):
-            raise serializers.ValidationError(
-                "A menu item cannot be selected more than once."
-            )
+            raise serializers.ValidationError("A menu item cannot be selected more than once.")
 
         return value

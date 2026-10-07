@@ -36,8 +36,7 @@ from reservations.utils.cookies import (
 
 
 class ReservationCreateView(APIView):
-    """
-    Create a pending reservation.
+    """Create a pending reservation.
 
     Successful creation reserves the requested seats and generates
     an OTP. The OTP itself is sent to the customer's email and is
@@ -107,9 +106,7 @@ class ReservationCreateView(APIView):
 
 
 class ReservationListView(APIView):
-    """
-    Return reservations belonging to the current browser session.
-    """
+    """Return reservations belonging to the current browser session."""
 
     def get(self, request):
         raw_token = get_browser_session_token(request)
@@ -142,9 +139,7 @@ class ReservationListView(APIView):
 
 
 class ReservationDetailView(APIView):
-    """
-    Retrieve one reservation belonging to the current browser session.
-    """
+    """Retrieve one reservation belonging to the current browser session."""
 
     def get(
         self,
@@ -178,9 +173,7 @@ class ReservationDetailView(APIView):
 
 
 class ReservationCancelView(APIView):
-    """
-    Cancel a reservation belonging to the current browser session.
-    """
+    """Cancel a reservation belonging to the current browser session."""
 
     def post(
         self,
@@ -329,9 +322,7 @@ class ActiveReservationView(APIView):
 
 
 class ReservationDraftMenuUpdateView(APIView):
-    """
-    Update the selected menu items of the current draft reservation.
-    """
+    """Update the selected menu items of the current draft reservation."""
 
     def patch(self, request):
         serializer = ReservationDraftMenuUpdateSerializer(data=request.data)
@@ -354,9 +345,7 @@ class ReservationDraftMenuUpdateView(APIView):
         try:
             reservation = update_draft_menu(
                 browser_session=browser_session,
-                selected_menu_item_ids=serializer.validated_data[
-                    "selected_menu_item_ids"
-                ],
+                selected_menu_item_ids=serializer.validated_data["selected_menu_item_ids"],
             )
 
         except InvalidMenuSelectionError as exc:
@@ -395,8 +384,7 @@ class ReservationDraftMenuUpdateView(APIView):
 
 
 class ReservationDraftFinalizeView(APIView):
-    """
-    Finalize the current draft reservation.
+    """Finalize the current draft reservation.
 
     DRAFT -> PENDING_VERIFICATION
 

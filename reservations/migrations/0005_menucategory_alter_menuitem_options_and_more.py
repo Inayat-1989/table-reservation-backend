@@ -6,49 +6,54 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('reservations', '0004_alter_reservation_status'),
+        ("reservations", "0004_alter_reservation_status"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='MenuCategory',
+            name="MenuCategory",
             fields=[
-                ('id', models.BigAutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=100, unique=True)),
-                ('description', models.TextField(blank=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=100, unique=True)),
+                ("description", models.TextField(blank=True)),
+                ("is_active", models.BooleanField(default=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'ordering': ['name'],
+                "ordering": ["name"],
             },
         ),
         migrations.AlterModelOptions(
-            name='menuitem',
-            options={'ordering': ['title']},
+            name="menuitem",
+            options={"ordering": ["title"]},
         ),
         migrations.AddField(
-            model_name='menuitem',
-            name='created_at',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="menuitem",
+            name="created_at",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='menuitem',
-            name='is_deleted',
+            model_name="menuitem",
+            name="is_deleted",
             field=models.BooleanField(db_index=True, default=False),
         ),
         migrations.AddField(
-            model_name='menuitem',
-            name='updated_at',
+            model_name="menuitem",
+            name="updated_at",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AlterField(
-            model_name='menuitem',
-            name='category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='menu_items', to='reservations.menucategory'),
+            model_name="menuitem",
+            name="category",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="menu_items",
+                to="reservations.menucategory",
+            ),
         ),
     ]

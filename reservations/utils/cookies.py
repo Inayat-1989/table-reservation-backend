@@ -8,12 +8,10 @@ def get_browser_session_token(request):
 
 
 def set_browser_session_cookie(response, raw_token):
-    """
-    Set the browser-session cookie when a new session was created.
+    """Set the browser-session cookie when a new session was created.
 
     The raw token is HttpOnly so JavaScript cannot read it.
     """
-
     if not raw_token:
         return
 

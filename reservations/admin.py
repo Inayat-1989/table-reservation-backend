@@ -139,9 +139,7 @@ class ReservationAdmin(admin.ModelAdmin):
             "Timestamps",
             {
                 "fields": ("created_at", "updated_at"),
-                "classes": (
-                    "collapse",
-                ),  # Keeps page organized by hiding timestamps by default
+                "classes": ("collapse",),  # Keeps page organized by hiding timestamps by default
             },
         ),
     )

@@ -6,13 +6,11 @@ from reservations.models import TimeSlot
 
 
 def get_slots_for_date(selected_date):
-    """
-    Return all TimeSlot records belonging to the selected date.
+    """Return all TimeSlot records belonging to the selected date.
 
     Business rules such as today's cutoff are handled by
     the service layer.
     """
-
     current_timezone = timezone.get_current_timezone()
 
     start_of_day = timezone.make_aware(
@@ -32,16 +30,10 @@ def get_slots_for_date(selected_date):
 
 
 def get_slot_by_id(slot_id):
-    """
-    Return a slot by primary key.
-    """
-
+    """Return a slot by primary key."""
     return TimeSlot.objects.filter(id=slot_id).first()
 
 
 def get_slot_by_start_time(starts_at):
-    """
-    Return a slot by exact datetime.
-    """
-
+    """Return a slot by exact datetime."""
     return TimeSlot.objects.filter(starts_at=starts_at).first()

@@ -4,15 +4,26 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('reservations', '0003_restaurantsettings_closing_time_and_more'),
+        ("reservations", "0003_restaurantsettings_closing_time_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='reservation',
-            name='status',
-            field=models.CharField(choices=[('DRAFT', 'Draft'), ('PENDING_VERIFICATION', 'Pending Email Verification'), ('CONFIRMED', 'Confirmed'), ('CANCELLED', 'Cancelled'), ('COMPLETED', 'Completed'), ('EXPIRED', 'Expired')], db_index=True, default='PENDING_VERIFICATION', max_length=25),
+            model_name="reservation",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("DRAFT", "Draft"),
+                    ("PENDING_VERIFICATION", "Pending Email Verification"),
+                    ("CONFIRMED", "Confirmed"),
+                    ("CANCELLED", "Cancelled"),
+                    ("COMPLETED", "Completed"),
+                    ("EXPIRED", "Expired"),
+                ],
+                db_index=True,
+                default="PENDING_VERIFICATION",
+                max_length=25,
+            ),
         ),
     ]

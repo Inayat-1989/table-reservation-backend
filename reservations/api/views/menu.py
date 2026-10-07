@@ -6,9 +6,7 @@ from reservations.selectors.menu import get_available_menu_items
 
 
 class MenuListView(APIView):
-    """
-    Return all currently available menu items.
-    """
+    """Return all currently available menu items."""
 
     def get(self, request):
         menu_items = get_available_menu_items()

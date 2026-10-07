@@ -21,15 +21,13 @@ class InvalidAdminSessionError(AdminSessionError):
 
 
 def create_admin_session(admin):
-    """
-    Create a new authenticated admin session.
+    """Create a new authenticated admin session.
 
     Returns the raw session token and session object.
 
     The raw token is intended to be placed in an HttpOnly cookie.
     Only its hash is stored in the database.
     """
-
     now = timezone.now()
 
     session_duration = timedelta(
@@ -58,12 +56,10 @@ def create_admin_session(admin):
 
 
 def get_admin_from_session_token(raw_session_token):
-    """
-    Validate an admin session token and return the authenticated admin.
+    """Validate an admin session token and return the authenticated admin.
 
     The raw token comes from the HttpOnly browser cookie.
     """
-
     if not raw_session_token:
         raise InvalidAdminSessionError(
             "Admin session is required.",
@@ -98,12 +94,10 @@ def get_admin_from_session_token(raw_session_token):
 
 
 def revoke_admin_session(raw_session_token):
-    """
-    Revoke the admin session represented by the raw session token.
+    """Revoke the admin session represented by the raw session token.
 
     Returns True if a session was revoked, otherwise False.
     """
-
     if not raw_session_token:
         return False
 

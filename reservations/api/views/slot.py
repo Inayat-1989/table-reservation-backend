@@ -14,8 +14,7 @@ from reservations.services.slot_service import (
 
 
 class SlotListView(APIView):
-    """
-    Return restaurant slots for a selected date.
+    """Return restaurant slots for a selected date.
 
     GET /api/v1/slots/?date=2026-10-05
     """

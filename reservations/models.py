@@ -50,9 +50,7 @@ class RestaurantSettings(models.Model):
 
     closing_time = models.TimeField(default=time(23, 0))
 
-    slot_interval_minutes = models.PositiveIntegerField(
-        default=30, validators=[MinValueValidator(1)]
-    )
+    slot_interval_minutes = models.PositiveIntegerField(default=30, validators=[MinValueValidator(1)])
 
     def __str__(self):
         return "Restaurant Settings"

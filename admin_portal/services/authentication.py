@@ -23,26 +23,19 @@ from admin_portal.utils.security import (
 
 
 class AdminAuthenticationError(Exception):
-    """
-    Base exception for custom admin authentication failures.
-    """
+    """Base exception for custom admin authentication failures."""
 
 
 class InvalidAdminCredentialsError(AdminAuthenticationError):
-    """
-    Raised when the supplied username/email or password is invalid.
-    """
+    """Raised when the supplied username/email or password is invalid."""
 
 
 class InactiveAdminError(AdminAuthenticationError):
-    """
-    Raised when an admin account exists but is inactive.
-    """
+    """Raised when an admin account exists but is inactive."""
 
 
 def authenticate_admin(identifier, password):
-    """
-    Validate an admin's login credentials.
+    """Validate an admin's login credentials.
 
     `identifier` may be either:
     - username
@@ -50,7 +43,6 @@ def authenticate_admin(identifier, password):
 
     Returns the AdminAccount if credentials are valid.
     """
-
     identifier = identifier.strip()
 
     admin = AdminAccount.objects.filter(username=identifier).first()
@@ -71,27 +63,20 @@ def authenticate_admin(identifier, password):
 
 
 class InvalidLoginChallengeError(AdminAuthenticationError):
-    """
-    Raised when a login challenge is invalid, expired, or inactive.
-    """
+    """Raised when a login challenge is invalid, expired, or inactive."""
 
 
 class InvalidOTPError(AdminAuthenticationError):
-    """
-    Raised when the supplied OTP is incorrect.
-    """
+    """Raised when the supplied OTP is incorrect."""
 
 
 class OTPAttemptLimitExceededError(AdminAuthenticationError):
-    """
-    Raised when the maximum OTP verification attempts have been reached.
-    """
+    """Raised when the maximum OTP verification attempts have been reached."""
 
 
 @transaction.atomic
 def create_login_challenge(admin):
-    """
-    Create a new temporary 2FA login challenge.
+    """Create a new temporary 2FA login challenge.
 
     This does NOT create an AdminSession.
 
@@ -100,8 +85,8 @@ def create_login_challenge(admin):
             "challenge_token": raw temporary challenge token,
             "expires_at": datetime,
         }
-    """
 
+    """
     now = timezone.now()
 
     challenge_duration = timedelta(
@@ -144,12 +129,10 @@ def create_login_challenge(admin):
 
 
 def login(identifier, password):
-    """
-    Authenticate an admin and create a 2FA challenge.
+    """Authenticate an admin and create a 2FA challenge.
 
     This method does NOT create an AdminSession.
     """
-
     admin = authenticate_admin(
         identifier=identifier,
         password=password,
@@ -167,8 +150,7 @@ def verify_login_challenge(
     challenge_token,
     otp,
 ):
-    """
-    Verify a login challenge and its OTP.
+    """Verify a login challenge and its OTP.
 
     A fully authenticated AdminSession is created only after
     successful OTP verification.
@@ -180,8 +162,8 @@ def verify_login_challenge(
             "session_token": raw_session_token,
             "expires_at": datetime,
         }
-    """
 
+    """
     now = timezone.now()
 
     challenge_token_hash = hash_token(
