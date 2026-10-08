@@ -39,3 +39,9 @@ class AdminReservationSlotPopularitySerializer(serializers.Serializer):
     hour = serializers.IntegerField()
     minute = serializers.IntegerField()
     reservation_count = serializers.IntegerField()
+
+
+class AdminTrendingFoodItemSerializer(serializers.Serializer):
+    menu_item_id = serializers.IntegerField()
+    title = serializers.CharField()
+    selection_count = serializers.IntegerField()

@@ -11,6 +11,17 @@ from admin_portal.api.views.dashboard import (
     AdminPeakReservationHoursView,
     AdminReservationSlotPopularityView,
     AdminReservationTrendView,
+    AdminTrendingFoodItemsView,
+)
+from admin_portal.api.views.menu import (
+    AdminMenuCategoryDetailView,
+    AdminMenuCategoryListView,
+    AdminMenuItemDetailView,
+    AdminMenuItemListView,
+)
+from admin_portal.api.views.reservations import (
+    AdminReservationDetailView,
+    AdminReservationListView,
 )
 
 urlpatterns = [
@@ -53,5 +64,40 @@ urlpatterns = [
         "dashboard/slot-popularity/",
         AdminReservationSlotPopularityView.as_view(),
         name="admin-dashboard-slot-popularity",
+    ),
+    path(
+        "dashboard/trending-food-items/",
+        AdminTrendingFoodItemsView.as_view(),
+        name="admin-trending-food-items",
+    ),
+    path(
+        "reservations/",
+        AdminReservationListView.as_view(),
+        name="admin-reservation-list",
+    ),
+    path(
+        "reservations/<uuid:reference_code>/",
+        AdminReservationDetailView.as_view(),
+        name="admin-reservation-detail",
+    ),
+    path(
+        "menu/categories/",
+        AdminMenuCategoryListView.as_view(),
+        name="admin-menu-category-list",
+    ),
+    path(
+        "menu/categories/<int:category_id>/",
+        AdminMenuCategoryDetailView.as_view(),
+        name="admin-menu-category-detail",
+    ),
+    path(
+        "menu/items/",
+        AdminMenuItemListView.as_view(),
+        name="admin-menu-item-list",
+    ),
+    path(
+        "menu/items/<int:menu_item_id>/",
+        AdminMenuItemDetailView.as_view(),
+        name="admin-menu-item-detail",
     ),
 ]

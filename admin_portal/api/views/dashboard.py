@@ -7,12 +7,14 @@ from admin_portal.api.serializers.dashboard import (
     AdminPeakReservationHourSerializer,
     AdminReservationSlotPopularitySerializer,
     AdminReservationTrendSerializer,
+    AdminTrendingFoodItemSerializer,
 )
 from admin_portal.services.dashboard import (
     get_dashboard_summary,
     get_peak_reservation_hours,
     get_reservation_slot_popularity,
     get_reservation_trends,
+    get_trending_food_items,
 )
 
 
@@ -85,3 +87,17 @@ class AdminReservationSlotPopularityView(APIView):
         return Response(
             serializer.data,
         )
+
+
+class AdminTrendingFoodItemsView(APIView):
+    permission_classes = [IsAuthenticatedAdmin]
+
+    def get(self, request):
+        trending_items = get_trending_food_items()
+
+        serializer = AdminTrendingFoodItemSerializer(
+            trending_items,
+            many=True,
+        )
+
+        return Response(serializer.data)

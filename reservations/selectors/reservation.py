@@ -84,3 +84,47 @@ def get_active_reservation(browser_session):
         .order_by("-created_at")
         .first()
     )
+
+
+def get_admin_reservations(
+    search=None,
+    date_from=None,
+    date_to=None,
+    status=None,
+):
+    queryset = Reservation.objects.select_related(
+        "customer",
+        "slot",
+    ).order_by("-created_at")
+
+    if search:
+        queryset = queryset.filter(
+            Q(customer__full_name__icontains=search)
+            | Q(customer__email__icontains=search)
+            | Q(customer__phone__icontains=search)
+            | Q(reference_code__icontains=search)
+        )
+
+    if date_from:
+        queryset = queryset.filter(slot__starts_at__date__gte=date_from)
+
+    if date_to:
+        queryset = queryset.filter(slot__starts_at__date__lte=date_to)
+
+    if status:
+        queryset = queryset.filter(status=status)
+
+    return queryset
+
+def get_admin_reservation_by_reference(reference_code):
+    return (
+        Reservation.objects
+        .select_related(
+            "customer",
+            "slot",
+        )
+        .filter(
+            reference_code=reference_code,
+        )
+        .first()
+    )

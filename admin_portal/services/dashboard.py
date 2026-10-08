@@ -1,3 +1,4 @@
+from collections import Counter
 from datetime import datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
@@ -5,7 +6,7 @@ from django.db.models import Count
 from django.db.models.functions import ExtractHour, ExtractMinute, TruncDate
 from django.utils import timezone
 
-from reservations.models import Reservation
+from reservations.models import MenuItem, Reservation
 
 RESTAURANT_TIMEZONE = ZoneInfo("Asia/Karachi")
 
@@ -209,3 +210,48 @@ def get_reservation_slot_popularity():
         }
         for item in reservations
     ]
+
+
+def get_trending_food_items(limit=10):
+    reservations = Reservation.objects.filter(
+        status=Reservation.Status.CONFIRMED,
+    ).values_list("selected_menu_items", flat=True)
+
+    selection_counts = Counter()
+
+    for selected_menu_items in reservations:
+        if not selected_menu_items:
+            continue
+
+        for menu_item_id in selected_menu_items:
+            selection_counts[int(menu_item_id)] += 1
+
+    if not selection_counts:
+        return []
+
+    menu_items = {
+        item.id: item
+        for item in MenuItem.objects.filter(
+            id__in=selection_counts.keys(),
+            is_special=True,
+        )
+    }
+
+    trending_items = [
+        {
+            "menu_item_id": menu_item_id,
+            "title": menu_items[menu_item_id].title,
+            "selection_count": count,
+        }
+        for menu_item_id, count in selection_counts.items()
+        if menu_item_id in menu_items
+    ]
+
+    trending_items.sort(
+        key=lambda item: (
+            -item["selection_count"],
+            item["menu_item_id"],
+        )
+    )
+
+    return trending_items[:limit]
