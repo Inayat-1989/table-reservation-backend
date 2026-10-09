@@ -4,6 +4,7 @@ from datetime import time
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Q
+from django.utils import timezone
 
 
 class BrowserSession(models.Model):
@@ -68,7 +69,8 @@ class TimeSlot(models.Model):
     )
 
     def __str__(self):
-        return self.starts_at.strftime("%Y-%m-%d %H:%M")
+        local_time = timezone.localtime(self.starts_at)
+        return local_time.strftime("%Y-%m-%d %H:%M")
 
 
 class MenuCategory(models.Model):

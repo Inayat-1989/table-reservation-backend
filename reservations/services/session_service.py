@@ -56,16 +56,14 @@ def get_or_create_customer(
     phone,
 ):
     """Get the customer belonging to the browser session, or create one if this is the first reservation."""
-    customer, created = Customer.objects.get_or_create(
+    customer = Customer.objects.create(
         browser_session=browser_session,
-        defaults={
-            "full_name": full_name,
-            "email": email,
-            "phone": phone,
-        },
+        full_name=full_name,
+        email=email,
+        phone=phone,
     )
 
-    if not created:
+    if not customer:
         customer.full_name = full_name
         customer.email = email
         customer.phone = phone

@@ -116,10 +116,10 @@ def get_admin_reservations(
 
     return queryset
 
+
 def get_admin_reservation_by_reference(reference_code):
     return (
-        Reservation.objects
-        .select_related(
+        Reservation.objects.select_related(
             "customer",
             "slot",
         )

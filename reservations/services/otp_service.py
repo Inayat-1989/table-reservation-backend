@@ -56,7 +56,7 @@ def issue_otp(reservation_id):
         if latest_otp:
             cooldown = timedelta(seconds=settings.OTP_RESEND_COOLDOWN_SECONDS)
             if now < latest_otp.sent_at + cooldown:
-                raise OTPRateLimitError("Please wait before requesting another OTP.")
+                raise OTPRateLimitError("Please wait 1 Min before requesting another OTP.")
 
         # Limit the number of OTPs issued for this reservation.
         total_sent = reservation.otp_attempts_history.count()
