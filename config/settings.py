@@ -9,6 +9,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -201,3 +202,21 @@ DEFAULT_FROM_EMAIL = "innokhan2291@gmail.com"
 APP_NAME = "Table Reservation System"
 
 EMAIL_NAME = "Yummy Management"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "django_test.log"),
+        },
+    },
+    "loggers": {
+        "django.server": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}
