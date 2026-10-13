@@ -31,7 +31,7 @@ Please do not share this code with anyone.
 If you did not make this reservation, you can safely ignore this email.
 
 Regards,
-{settings.APP_NAME}
+{settings.EMAIL_NAME}
 """
 
     html_content = f"""

@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import (
     ActiveReservationView,
+    DraftReservationCancelView,
     MenuListView,
     OTPResendView,
     OTPVerifyView,
@@ -76,6 +77,11 @@ urlpatterns = [
         "reservations/draft/finalize/",
         ReservationDraftFinalizeView.as_view(),
         name="reservation-draft-finalize",
+    ),
+    path(
+        "reservations/draft/cancel/",
+        DraftReservationCancelView.as_view(),
+        name="reservation-draft-cancel",
     ),
     path("csrf/", csrf_token_view, name="csrf-token"),
 ]

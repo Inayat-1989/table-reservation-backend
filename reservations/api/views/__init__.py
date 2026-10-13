@@ -5,6 +5,7 @@ from .otp import (
 )
 from .reservation import (
     ActiveReservationView,
+    DraftReservationCancelView,
     ReservationCancelView,
     ReservationCreateView,
     ReservationDetailView,
@@ -17,6 +18,7 @@ from .slot import SlotListView
 
 __all__ = [
     "ActiveReservationView",
+    "DraftReservationCancelView",
     "MenuListView",
     "OTPResendView",
     "OTPVerifyView",
