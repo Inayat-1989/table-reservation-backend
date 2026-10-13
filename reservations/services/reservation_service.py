@@ -682,3 +682,43 @@ def finalize_draft_reservation(
     )
 
     return reservation
+
+
+@transaction.atomic
+def cancel_draft_reservation(*, browser_session):
+    """Cancel the active draft belonging to the supplied browser session.
+
+    Draft cancellation does not reserve or release seats because a DRAFT
+    reservation has not reserved capacity.
+
+    Returns:
+        Reservation: The cancelled draft.
+
+    Raises:
+        ReservationServiceError: If no active draft exists.
+
+    """
+    reservation = (
+        Reservation.objects.select_for_update()
+        .select_related("customer")
+        .filter(
+            customer__browser_session=browser_session,
+            status=Reservation.Status.DRAFT,
+        )
+        .order_by("-created_at")
+        .first()
+    )
+
+    if reservation is None:
+        raise ReservationServiceError("No active draft reservation exists.")
+
+    reservation.status = Reservation.Status.CANCELLED
+
+    reservation.save(
+        update_fields=[
+            "status",
+            "updated_at",
+        ]
+    )
+
+    return reservation

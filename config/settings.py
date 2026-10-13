@@ -199,3 +199,5 @@ EMAIL_HOST_PASSWORD = "danu rlsu rkpq dbqk"
 DEFAULT_FROM_EMAIL = "innokhan2291@gmail.com"
 
 APP_NAME = "Table Reservation System"
+
+EMAIL_NAME = "Yummy Management"

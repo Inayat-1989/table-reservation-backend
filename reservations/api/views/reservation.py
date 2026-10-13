@@ -18,6 +18,7 @@ from reservations.services.reservation_service import (
     InvalidMenuSelectionError,
     ReservationServiceError,
     ReservationStateError,
+    cancel_draft_reservation,
     cancel_reservation,
     create_draft_reservation,
     create_pending_reservation,
@@ -455,5 +456,44 @@ class ReservationDraftFinalizeView(APIView):
 
         return Response(
             serializer.data,
+            status=status.HTTP_200_OK,
+        )
+
+
+class DraftReservationCancelView(APIView):
+    """Cancel the active draft belonging to the current browser session."""
+
+    def post(self, request):
+        raw_token = get_browser_session_token(request)
+        browser_session = get_browser_session(raw_token)
+
+        if browser_session is None:
+            return Response(
+                {
+                    "detail": "Your reservation session could not be found.",
+                    "code": "SESSION_NOT_FOUND",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        try:
+            reservation = cancel_draft_reservation(
+                browser_session=browser_session,
+            )
+        except ReservationServiceError as exc:
+            return Response(
+                {
+                    "detail": str(exc),
+                    "code": "DRAFT_NOT_FOUND",
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        return Response(
+            {
+                "detail": "Draft reservation cancelled successfully.",
+                "status": reservation.status,
+                "reference_code": str(reservation.reference_code),
+            },
             status=status.HTTP_200_OK,
         )
