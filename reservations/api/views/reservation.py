@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from reservations.api.pagination import ReservationPagination
 from reservations.api.serializers.reservation import (
     ReservationCreateSerializer,
     ReservationDraftCreateSerializer,
@@ -107,31 +108,31 @@ class ReservationCreateView(APIView):
 
 
 class ReservationListView(APIView):
-    """Return reservations belonging to the current browser session."""
+    """Return paginated reservations belonging to the current browser session."""
 
     def get(self, request):
         raw_token = get_browser_session_token(request)
         browser_session, new_token = get_or_create_browser_session(raw_token)
 
-        customer = getattr(
-            browser_session,
-            "customer",
-            None,
+        customer = getattr(browser_session, "customer", None)
+
+        reservations = get_customer_reservations(customer) if customer is not None else []
+
+        paginator = ReservationPagination()
+        page = paginator.paginate_queryset(
+            reservations,
+            request,
+            view=self,
         )
 
-        reservations = [] if customer is None else get_customer_reservations(customer)
-
         serializer = ReservationResponseSerializer(
-            reservations,
+            page,
             many=True,
         )
 
-        response = Response(serializer.data)
+        response = paginator.get_paginated_response(serializer.data)
 
-        set_browser_session_cookie(
-            response,
-            new_token,
-        )
+        set_browser_session_cookie(response, new_token)
 
         return response
 

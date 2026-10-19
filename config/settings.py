@@ -25,8 +25,11 @@ SECRET_KEY = "django-insecure-z6&phg@bhz3hlsk!549s!f^v608i$ardc=6*@&x8$2_e9paa1m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "backend",
+]
 # OTP configuration
 
 OTP_LENGTH = 6
@@ -170,7 +173,7 @@ USE_I18N = True
 USE_TZ = True
 
 
-CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_BROKER_URL = "redis://redis:6379/0"
 
 CELERY_TASK_SERIALIZER = "json"
 CELERY_ACCEPT_CONTENT = ["json"]
