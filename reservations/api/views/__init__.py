@@ -2,6 +2,7 @@ from .menu import MenuListView
 from .otp import (
     OTPResendView,
     OTPVerifyView,
+    ReservationOTPExpiryView,
 )
 from .reservation import (
     ActiveReservationView,
@@ -29,5 +30,6 @@ __all__ = [
     "ReservationDraftFinalizeView",
     "ReservationDraftMenuUpdateView",
     "ReservationListView",
+    "ReservationOTPExpiryView",
     "SlotListView",
 ]

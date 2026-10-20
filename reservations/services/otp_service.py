@@ -147,3 +147,24 @@ def verify_reservation_otp(reservation_id, submitted_otp):
         raise error
 
     return verified_record
+
+
+def get_active_otp_expiry(reservation_reference):
+    reservation = Reservation.objects.filter(
+        reference_code=reservation_reference,
+        status=Reservation.Status.PENDING_VERIFICATION,
+    ).first()
+
+    if reservation is None:
+        return None
+
+    return (
+        ReservationOTP.objects.filter(
+            reservation=reservation,
+            is_active=True,
+            verified_at__isnull=True,
+        )
+        .order_by("-sent_at")
+        .values_list("expires_at", flat=True)
+        .first()
+    )

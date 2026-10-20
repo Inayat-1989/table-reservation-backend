@@ -131,6 +131,7 @@ class ReservationListView(APIView):
         )
 
         response = paginator.get_paginated_response(serializer.data)
+        response.data["page_size"] = paginator.get_page_size(request)
 
         set_browser_session_cookie(response, new_token)
 

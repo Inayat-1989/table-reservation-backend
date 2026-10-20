@@ -20,6 +20,7 @@ from reservations.services.otp_service import (
     OTPInvalidError,
     OTPNotAvailableError,
     OTPRateLimitError,
+    get_active_otp_expiry,
     issue_otp,
 )
 from reservations.services.reservation_service import (
@@ -226,3 +227,19 @@ class OTPVerifyView(APIView):
         )
 
         return response
+
+
+class ReservationOTPExpiryView(APIView):
+    def get(self, request, reference_code):
+        expires_at = get_active_otp_expiry(reference_code)
+
+        if expires_at is None:
+            return Response(
+                {"detail": ("No verification code was found for this reservation.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        return Response(
+            {"expires_at": expires_at.isoformat()},
+            status=status.HTTP_200_OK,
+        )

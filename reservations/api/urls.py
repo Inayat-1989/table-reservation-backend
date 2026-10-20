@@ -13,6 +13,7 @@ from .views import (
     ReservationDraftFinalizeView,
     ReservationDraftMenuUpdateView,
     ReservationListView,
+    ReservationOTPExpiryView,
     SlotListView,
 )
 from .views.security import csrf_token_view
@@ -82,6 +83,11 @@ urlpatterns = [
         "reservations/draft/cancel/",
         DraftReservationCancelView.as_view(),
         name="reservation-draft-cancel",
+    ),
+    path(
+        "reservations/<uuid:reference_code>/otp-expiry/",
+        ReservationOTPExpiryView.as_view(),
+        name="reservation-otp-expiry",
     ),
     path("csrf/", csrf_token_view, name="csrf-token"),
 ]
