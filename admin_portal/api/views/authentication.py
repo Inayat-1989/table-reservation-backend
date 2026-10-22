@@ -23,13 +23,6 @@ from admin_portal.services.session_service import (
     revoke_admin_session,
 )
 
-# required_admin_roles = (
-#     AdminRole.MENU_MANAGER,
-#     AdminRole.ADMIN,
-#     AdminRole.SUPER_ADMIN,
-#     AdminRole.RESERVATION_VIEWER,
-# )
-
 
 class AdminLoginView(APIView):
     def post(self, request):
@@ -39,8 +32,10 @@ class AdminLoginView(APIView):
 
         serializer.is_valid(raise_exception=True)
 
-        identifier = serializer.validated_data["identifier"]
-        password = serializer.validated_data["password"]
+        validated_data = serializer.validated_data
+
+        identifier: str = validated_data["identifier"]
+        password: str = validated_data["password"]
 
         try:
             login_data = login(
